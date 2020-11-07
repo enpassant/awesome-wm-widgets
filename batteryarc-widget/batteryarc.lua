@@ -71,13 +71,14 @@ local function worker(args)
         local charge = 0
         local status
         for s in stdout:gmatch("[^\r\n]+") do
-            local cur_status, charge_str, time = string.match(s, '.+: (%a+), (%d?%d?%d)%%,?(.*)')
+            local cur_status, charge_str, time = string.match(s, '.+: ([^,]+), (%d?%d?%d)%%,?(.*)')
             if cur_status ~= nil and charge_str ~=nil then
                 local cur_charge = tonumber(charge_str)
                 if cur_charge > charge then
                     status = cur_status
                     charge = cur_charge
                 end
+                break
             end
         end
 
