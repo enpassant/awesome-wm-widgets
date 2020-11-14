@@ -67,12 +67,13 @@ local function launch(args)
     local phrases = args.phrases or {'Goodbye!'}
     local icon_size = args.icon_size or 40
     local icon_margin = args.icon_margin or 16
+    local placement = args.placement or 'center'
 
     local onlogout = args.onlogout or function () awesome.quit() end
-    local onlock = args.onlock or function() awful.spawn.with_shell("systemctl suspend") end
+    local onlock = args.onlock or function() awful.spawn.with_shell("systemctl suspend -i") end
     local onreboot = args.onreboot or function() awful.spawn.with_shell("reboot") end
-    local onsuspend = args.onsuspend or function() awful.spawn.with_shell("systemctl suspend") end
-    local onpoweroff = args.onpoweroff or function() awful.spawn.with_shell("shutdown now") end
+    local onsuspend = args.onsuspend or function() awful.spawn.with_shell("systemctl hibernate -i") end
+    local onpoweroff = args.onpoweroff or function() awful.spawn.with_shell("shutdown -h now") end
 
     w:set_bg(bg_color)
     if #phrases > 0 then
@@ -113,7 +114,25 @@ local function launch(args)
     w.screen = mouse.screen
     w.visible = true
 
-    awful.placement.centered(w)
+    if placement == 'top' then
+        awful.placement.top(w, {
+            margins = { top = 30 },
+            parent = awful.screen.focused()
+        })
+    elseif placement == 'top_right' then
+        awful.placement.top_right(w, {
+            margins = { top = 30, right = 10},
+            parent = awful.screen.focused()
+        })
+    elseif placement == 'bottom_right' then
+        awful.placement.bottom_right(w, {
+            margins = { bottom = 30, right = 10},
+            parent = awful.screen.focused()
+        })
+    else
+        awful.placement.centered(w)
+    end
+
     capi.keygrabber.run(function(_, key, event)
         if event == "release" then return end
         if key then
