@@ -97,6 +97,7 @@ local function worker(args)
     local enable_kill_button = args.enable_kill_button or false
     local process_info_max_length = args.process_info_max_length or -1
     local timeout = args.timeout or 1
+    local monitor = args.monitor or "gnome-system-monitor"
 
     local cpugraph_widget = wibox.widget {
         max_value = 100,
@@ -131,6 +132,9 @@ local function worker(args)
                         else
                             popup:move_next_to(mouse.current_widget_geometry)
                         end
+                    end),
+                    awful.button({}, 3, function()
+                        awful.spawn(monitor)
                     end)
             )
     )
