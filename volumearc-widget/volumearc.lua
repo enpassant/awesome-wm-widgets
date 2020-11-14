@@ -34,6 +34,7 @@ local function worker(args)
     local thickness = args.thickness or 2
     local height = args.height or 18
     local timeout = args.timeout or 1
+    local mixer = args.mixer or "pavucontrol"
 
     local get_volume_cmd = args.get_volume_cmd or GET_VOLUME_CMD
     local inc_volume_cmd = args.inc_volume_cmd or INC_VOLUME_CMD
@@ -74,6 +75,7 @@ local function worker(args)
         if (button == 4) then awful.spawn(inc_volume_cmd, false)
         elseif (button == 5) then awful.spawn(dec_volume_cmd, false)
         elseif (button == 1) then awful.spawn(tog_volume_cmd, false)
+        elseif (button == 3) then awful.spawn(mixer)
         end
 
         spawn.easy_async(get_volume_cmd, function(stdout, stderr, exitreason, exitcode)
